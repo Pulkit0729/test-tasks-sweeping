@@ -19,6 +19,10 @@ export class SimulatedWalletService {
     this.gasToken = gasToken;
   }
 
+  getGasFee(): number {
+    return this.gasFee;
+  }
+
   createWallet(ethBalance: number = 0, usdtBalance: number = 0): Wallet {
     const id = Math.random().toString(36).substring(2, 15);
     const wallet = { id, balances: { ETH: ethBalance, USDT: usdtBalance } };
@@ -48,7 +52,7 @@ export class SimulatedWalletService {
       throw new NotEnoughTokenError(`Insufficient ${token} balance`);
     }
 
-    if (sourceWallet.balances[token] <= amount) {
+    if (sourceWallet.balances[token] < amount) {
       throw new NotEnoughTokenError(`Insufficient ${token} balance`);
     }
     const targetWallet = this.wallets.get(targetId);
